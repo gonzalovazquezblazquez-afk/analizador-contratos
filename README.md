@@ -11,25 +11,36 @@ Aplicación web que lee un contrato de alquiler de vivienda (España) en PDF, ex
 - Separa el contrato en cláusulas y explica cada una con sus consecuencias prácticas para el inquilino.
 - **Semáforo legal:** compara cada cláusula con el texto consolidado de la LAU descargado del BOE y la marca como 🟢 correcta, 🟡 a revisar o 🔴 contraria a la ley, con una explicación.
 - **Citas verificadas:** cada valoración se apoya en citas literales de la ley, y un programa comprueba que cada cita de la LAU existe palabra por palabra en el texto oficial. Si el modelo se inventa una cita, la aplicación lo marca.
+- **Informe en PDF:** genera un informe descargable con el resumen, el semáforo, los puntos a revisar y el análisis de cada cláusula con sus citas. Puedes ver [el informe del contrato de ejemplo](ejemplos/informe_ejemplo.pdf).
 - Valida la respuesta del modelo con un esquema fijo (*structured outputs* + Pydantic), así que la interfaz siempre recibe los campos que espera.
 - Incluye un **modo demo**: sin clave de la API, la aplicación muestra el análisis ya hecho de un contrato ficticio. Así cualquiera puede probarla sin coste.
 
 ## Cómo funciona
 
 ```
-                     LAU vigente (API de datos abiertos del BOE)
-                                    │
-PDF ──► analizador.py ──► API de Claude (claude-opus-5-5) ──► JSON validado ──► verificación de citas ──► app.py (Streamlit)
+Contrato en PDF + LAU vigente (API de datos abiertos del BOE)
+        │
+        ▼
+analizador.py ──► API de Claude (claude-opus-5-5)
+        │
+        ▼
+JSON validado con Pydantic ──► verificación de citas contra la LAU
+        │
+        ├──► app.py      interfaz web (Streamlit)
+        └──► informe.py  informe descargable en PDF
 ```
 
 | Archivo | Qué contiene |
 |---|---|
 | `analizador.py` | La llamada a Claude, las instrucciones (prompt), el esquema de la respuesta y la verificación de citas |
 | `app.py` | La interfaz web |
+| `informe.py` | Genera el informe en PDF a partir del análisis |
+| `fuentes/` | Fuente DejaVu Sans para el PDF (licencia libre en `LICENSE-DejaVu.txt`), necesaria para el símbolo € y las comillas |
 | `legislacion/descargar_lau.py` | Descarga la versión vigente de la LAU desde la API de datos abiertos del BOE |
 | `legislacion/lau.txt` | El texto de la LAU que usa la aplicación (fecha de la última modificación en la cabecera) |
 | `ejemplos/crear_contrato_ejemplo.py` | Genera un contrato ficticio con cláusulas válidas y problemáticas, y el color que debería recibir cada una |
 | `ejemplos/analisis_ejemplo.json` | Análisis ya hecho del contrato ficticio, que usa el modo demo |
+| `ejemplos/informe_ejemplo.pdf` | Informe en PDF del contrato ficticio (se regenera con `.venv/bin/python informe.py`) |
 
 ### Por qué la ley se descarga del BOE
 
@@ -93,6 +104,6 @@ Los contratos se envían a la API de Anthropic para analizarlos y la aplicación
 
 - [x] **Fase 1:** lectura del contrato y explicación de cada cláusula
 - [x] **Fase 2:** comparación con la LAU (texto consolidado del BOE), semáforo por cláusula y verificación de citas
-- [ ] **Fase 3:** informe descargable en PDF
+- [x] **Fase 3:** informe descargable en PDF
 - [ ] **Fase 4:** evaluación con contratos de prueba y porcentaje de aciertos
 - [ ] **Fase 5:** demo publicada en Streamlit Community Cloud

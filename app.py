@@ -3,6 +3,7 @@
 """
 
 import os
+from pathlib import Path
 
 import streamlit as st
 
@@ -16,6 +17,7 @@ from analizador import (
     cargar_ejemplo,
     cita_verificada,
 )
+from informe import generar_informe
 
 EMOJI = {"rojo": "🔴", "amarillo": "🟡", "verde": "🟢"}
 CAJA_VALORACION = {"rojo": st.error, "amarillo": st.warning, "verde": st.success}
@@ -43,6 +45,7 @@ if os.getenv("ANTHROPIC_API_KEY"):
                 # Se guarda en la sesión para no repetir la llamada (y el coste) al recargar la página
                 st.session_state["analisis"] = analizar_contrato(archivo.getvalue())
                 st.session_state["nombre_archivo"] = archivo.name
+                st.session_state["es_ejemplo"] = False
             except ErrorAnalisis as e:
                 st.error(str(e))
 else:
@@ -56,7 +59,8 @@ st.write("¿No tienes un contrato a mano? Prueba con uno de ejemplo (ficticio):"
 col_ver, col_descargar = st.columns(2)
 if col_ver.button("Ver análisis de ejemplo", use_container_width=True):
     st.session_state["analisis"] = cargar_ejemplo()
-    st.session_state["nombre_archivo"] = f"{PDF_EJEMPLO.name} (ejemplo)"
+    st.session_state["nombre_archivo"] = PDF_EJEMPLO.name
+    st.session_state["es_ejemplo"] = True
 col_descargar.download_button(
     "Descargar el contrato de ejemplo",
     data=PDF_EJEMPLO.read_bytes(),
@@ -80,17 +84,33 @@ def mostrar_fundamentos(clausula: Clausula) -> None:
         st.markdown(f"> {fundamento.cita}")
 
 
+@st.cache_data(ttl=3600)
+def informe_pdf(analisis_json: str, nombre_archivo: str, es_ejemplo: bool) -> bytes:
+    # Se cachea para no regenerar el PDF cada vez que se pulsa algo en la página
+    return generar_informe(AnalisisContrato.model_validate_json(analisis_json), nombre_archivo, es_ejemplo)
+
+
 analisis: AnalisisContrato | None = st.session_state.get("analisis")
 if analisis is None:
     st.stop()
 
+nombre_archivo = st.session_state["nombre_archivo"]
+es_ejemplo = st.session_state["es_ejemplo"]
 st.divider()
-st.subheader(f"Resultado: {st.session_state['nombre_archivo']}")
+st.subheader(f"Resultado: {nombre_archivo}" + (" (ejemplo)" if es_ejemplo else ""))
 
 if not analisis.es_contrato_de_alquiler:
     st.info("Este documento no parece un contrato de alquiler de vivienda.")
     st.write(analisis.resumen)
     st.stop()
+
+st.download_button(
+    "📥 Descargar informe en PDF",
+    data=informe_pdf(analisis.model_dump_json(), nombre_archivo, es_ejemplo),
+    file_name=f"informe_{Path(nombre_archivo).stem}.pdf",
+    mime="application/pdf",
+    type="primary",
+)
 
 st.markdown("#### Resumen")
 st.write(analisis.resumen)

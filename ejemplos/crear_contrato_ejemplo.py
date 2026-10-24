@@ -1,6 +1,6 @@
 """Genera un contrato de alquiler FICTICIO en PDF para probar el analizador.
 
-Uso (necesita fpdf2: .venv/bin/pip install fpdf2):
+Uso:
     .venv/bin/python ejemplos/crear_contrato_ejemplo.py
 
 El contrato mezcla a propósito cláusulas válidas y cláusulas problemáticas según la LAU.
