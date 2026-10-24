@@ -1,0 +1,129 @@
+{
+  "es_contrato_de_alquiler": true,
+  "resumen": "Contrato por el que D. Antonio Ejemplo Ficticio alquila a Dña. Laura Prueba Inventada un piso en Madrid para que viva en él de forma habitual. Dura un año y la renta es de 950 € al mes, con una subida fija del 5 % cada año. La inquilina entrega 2.850 € de fianza y asume los suministros, los gastos de la agencia y todas las reparaciones. El contrato también regula las obras, qué pasa si la inquilina se va antes de tiempo, las visitas del propietario y prohíbe tener mascotas.",
+  "datos": {
+    "tipo_contrato": "Arrendamiento de vivienda habitual",
+    "arrendador": "D. Antonio Ejemplo Ficticio",
+    "arrendatario": "Dña. Laura Prueba Inventada",
+    "inmueble": "Calle Ficticia n.º 12, 3.º B, 28000 Madrid",
+    "renta": "950 € al mes (11.400 € al año)",
+    "duracion": "1 año desde la firma (1 de septiembre de 2026), sin prórroga",
+    "fianza": "2.850 € (tres mensualidades)"
+  },
+  "clausulas": [
+    {
+      "numero": "Primera",
+      "titulo": "Objeto",
+      "explicacion": "El propietario te alquila el piso de la Calle Ficticia 12, 3.º B, en Madrid. El contrato indica que será tu vivienda habitual, es decir, el lugar donde vives de forma permanente.",
+      "a_tener_en_cuenta": [
+        "El piso es para vivir en él: darle otro uso (por ejemplo, alquilarlo a turistas) supondría incumplir el contrato.",
+        "Que sea tu vivienda habitual determina qué normas se aplican al alquiler."
+      ]
+    },
+    {
+      "numero": "Segunda",
+      "titulo": "Duración",
+      "explicacion": "El contrato dura un año desde la firma. Según el texto, al terminar ese año el contrato se acaba sin posibilidad de renovarse y tendrías que dejar el piso.",
+      "a_tener_en_cuenta": [
+        "Fecha de fin: un año después de la firma, es decir, el 1 de septiembre de 2027.",
+        "El contrato no prevé renovación: al vencer, tendrías que irte o negociar un contrato nuevo."
+      ]
+    },
+    {
+      "numero": "Tercera",
+      "titulo": "Renta",
+      "explicacion": "Pagas 950 € al mes (11.400 € al año). El pago se hace por transferencia, dentro de los cinco primeros días de cada mes, a la cuenta que te indique el propietario.",
+      "a_tener_en_cuenta": [
+        "Plazo de pago: del día 1 al 5 de cada mes.",
+        "Guarda los justificantes de las transferencias: son la prueba de que has pagado."
+      ]
+    },
+    {
+      "numero": "Cuarta",
+      "titulo": "Actualización de la renta",
+      "explicacion": "Cada año el alquiler sube automáticamente un 5 %. La subida es la misma pase lo que pase con la inflación o con cualquier índice oficial.",
+      "a_tener_en_cuenta": [
+        "Ejemplo: el segundo año pagarías 997,50 € al mes.",
+        "La subida no depende del IPC ni de ningún otro índice: es fija."
+      ]
+    },
+    {
+      "numero": "Quinta",
+      "titulo": "Fianza",
+      "explicacion": "Al firmar entregas 2.850 €, que equivalen a tres meses de alquiler, en concepto de fianza. La fianza es un dinero que el propietario guarda como garantía y que debe devolverte al acabar el contrato si el piso está en buen estado y no debes nada.",
+      "a_tener_en_cuenta": [
+        "Al firmar necesitas tener disponibles 2.850 € de fianza, además del primer mes de alquiler.",
+        "Pide un recibo firmado de la entrega de la fianza."
+      ]
+    },
+    {
+      "numero": "Sexta",
+      "titulo": "Gastos de gestión",
+      "explicacion": "Los honorarios de la agencia inmobiliaria y los gastos de preparar y firmar el contrato los pagas tú en su totalidad.",
+      "a_tener_en_cuenta": [
+        "Pregunta antes de firmar cuánto cobra la agencia: puede ser una cantidad importante.",
+        "Este gasto se suma a la fianza y al primer mes de alquiler."
+      ]
+    },
+    {
+      "numero": "Séptima",
+      "titulo": "Suministros",
+      "explicacion": "El agua, la luz, el gas e internet los pagas tú según lo que consumas. Además, los recibos tienen que estar domiciliados a tu nombre.",
+      "a_tener_en_cuenta": [
+        "Tendrás que cambiar la titularidad de los suministros o darlos de alta a tu nombre.",
+        "Estos gastos van aparte de los 950 € de alquiler."
+      ]
+    },
+    {
+      "numero": "Octava",
+      "titulo": "Reparaciones",
+      "explicacion": "Según el contrato, cualquier reparación que necesite el piso mientras vivas en él la pagas tú. Esto incluye las reparaciones necesarias para que siga siendo habitable, como una avería de la caldera o una fuga de agua.",
+      "a_tener_en_cuenta": [
+        "Si se estropea algo importante, el contrato pone el coste a tu cargo.",
+        "Haz fotos con fecha del estado del piso al entrar, para poder demostrar qué estaba ya estropeado."
+      ]
+    },
+    {
+      "numero": "Novena",
+      "titulo": "Obras",
+      "explicacion": "No puedes hacer obras que cambien la distribución del piso (por ejemplo, tirar un tabique) sin el permiso previo del propietario por escrito.",
+      "a_tener_en_cuenta": [
+        "Pide siempre el permiso por escrito antes de cualquier obra; un correo electrónico sirve como prueba.",
+        "Si haces obras sin permiso, estarías incumpliendo el contrato."
+      ]
+    },
+    {
+      "numero": "Décima",
+      "titulo": "Desistimiento",
+      "explicacion": "\"Desistimiento\" significa dejar el contrato antes de tiempo por decisión propia. Según esta cláusula, si te vas antes de que termine el año, pierdes toda la fianza y además tienes que pagar todos los meses que falten hasta el final.",
+      "a_tener_en_cuenta": [
+        "Ejemplo: si te vas a los 8 meses, según el contrato perderías los 2.850 € de fianza y deberías 4 mensualidades más (3.800 €).",
+        "No se menciona ningún plazo de preaviso."
+      ]
+    },
+    {
+      "numero": "Undécima",
+      "titulo": "Acceso a la vivienda",
+      "explicacion": "El propietario puede entrar en el piso cuando quiera y sin avisarte, para comprobar que está en buen estado.",
+      "a_tener_en_cuenta": [
+        "Según el texto, no necesita avisar, pedir permiso ni respetar ningún horario."
+      ]
+    },
+    {
+      "numero": "Duodécima",
+      "titulo": "Animales",
+      "explicacion": "No puedes tener mascotas en el piso.",
+      "a_tener_en_cuenta": [
+        "Si tienes o piensas tener una mascota, tendrías que negociarlo antes de firmar."
+      ]
+    },
+    {
+      "numero": "Decimotercera",
+      "titulo": "Jurisdicción",
+      "explicacion": "Si hay un conflicto que acabe en los tribunales, se resolverá en los juzgados de Madrid. \"Jurisdicción\" se refiere a qué tribunales son los competentes para decidir.",
+      "a_tener_en_cuenta": [
+        "Es la misma ciudad donde está el piso."
+      ]
+    }
+  ]
+}

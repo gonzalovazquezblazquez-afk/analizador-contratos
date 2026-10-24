@@ -1,0 +1,15 @@
+# Entorno virtual de Python
+.venv/
+__pycache__/
+
+# Claves y secretos: nunca se suben a GitHub
+.env
+.streamlit/secrets.toml
+
+# Contratos reales que pruebes en local (pueden tener datos personales)
+contratos_privados/
+
+.DS_Store
+
+# Configuración local de Claude Code
+.claude/
