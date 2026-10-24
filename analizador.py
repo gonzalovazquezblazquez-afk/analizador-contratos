@@ -5,6 +5,8 @@ Se puede usar desde la web (app.py) o desde la terminal:
 """
 
 import base64
+import json
+import re
 import sys
 from pathlib import Path
 from typing import Literal
@@ -25,9 +27,24 @@ CARPETA_EJEMPLOS = Path(__file__).parent / "ejemplos"
 PDF_EJEMPLO = CARPETA_EJEMPLOS / "contrato_alquiler_ejemplo.pdf"
 ANALISIS_EJEMPLO = CARPETA_EJEMPLOS / "analisis_ejemplo.json"
 
-# Texto vigente de la LAU, generado con legislacion/descargar_lau.py
-TEXTO_LAU = (Path(__file__).parent / "legislacion" / "lau.txt").read_text(encoding="utf-8")
+# Texto vigente de la LAU y anclas de sus artículos, generados con legislacion/descargar_lau.py
+CARPETA_LEGISLACION = Path(__file__).parent / "legislacion"
+TEXTO_LAU = (CARPETA_LEGISLACION / "lau.txt").read_text(encoding="utf-8")
 VERSION_LAU = TEXTO_LAU.splitlines()[1]  # "Texto consolidado del BOE (...), última modificación..."
+ANCLAS_LAU = json.loads((CARPETA_LEGISLACION / "lau_anclas.json").read_text(encoding="utf-8"))
+
+# Normas que se pueden enlazar en el BOE: nombre completo y URL del texto consolidado
+NORMAS_BOE = {
+    "LAU": ("Ley 29/1994, de Arrendamientos Urbanos (LAU)", "https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003"),
+    "CONSTITUCIÓN": ("Constitución Española", "https://www.boe.es/buscar/act.php?id=BOE-A-1978-31229"),
+    "ENJUICIAMIENTO CIVIL": ("Ley 1/2000, de Enjuiciamiento Civil", "https://www.boe.es/buscar/act.php?id=BOE-A-2000-323"),
+}
+
+# Jurisprudencia verificada a mano (jurisprudencia/sentencias.json) y textos oficiales del BOE
+CARPETA_JURISPRUDENCIA = Path(__file__).parent / "jurisprudencia"
+SENTENCIAS = json.loads((CARPETA_JURISPRUDENCIA / "sentencias.json").read_text(encoding="utf-8"))["sentencias"]
+SENTENCIAS_POR_ID = {s["id"]: s for s in SENTENCIAS}
+IDS_SENTENCIAS = tuple(SENTENCIAS_POR_ID)
 
 
 # --- Estructura de la respuesta -------------------------------------------
@@ -54,6 +71,13 @@ class Fundamento(BaseModel):
     )
 
 
+class ReferenciaJurisprudencia(BaseModel):
+    # Solo se puede elegir una sentencia de la base verificada: la IA no puede inventarse otra
+    id: Literal[IDS_SENTENCIAS]  # type: ignore[valid-type]
+    relevancia: str = Field(description="Por qué esta sentencia importa para la cláusula, 1-2 frases")
+    cita: str = Field(description="Uno de los pasajes literales de la sentencia, o cadena vacía")
+
+
 class Clausula(BaseModel):
     numero: str = Field(description="Numeración tal como aparece: 'Primera', '3', 'Anexo I'...")
     titulo: str = Field(description="Título breve; si la cláusula no tiene, inventa uno descriptivo")
@@ -64,6 +88,9 @@ class Clausula(BaseModel):
     semaforo: Literal["verde", "amarillo", "rojo"]
     valoracion: str = Field(description="Por qué tiene ese color, en lenguaje sencillo, 1-3 frases")
     fundamentos: list[Fundamento] = Field(description="Artículos que justifican la valoración")
+    jurisprudencia: list[ReferenciaJurisprudencia] = Field(
+        description="Sentencias de la base que respaldan la valoración; lista vacía si ninguna aplica"
+    )
 
 
 class AnalisisContrato(BaseModel):
@@ -107,11 +134,33 @@ Civil...) solo si conoces su texto con seguridad; se mostrará como cita no veri
 - Las notas "Téngase en cuenta que, con efectos de..." anuncian redacciones futuras. Aplica \
 la vigente y, si un cambio futuro afecta a la cláusula, menciónalo en la valoración.
 
+Reglas para la jurisprudencia:
+- Más abajo tienes una base de sentencias verificadas. Cita SOLO sentencias de esa base, por \
+su identificador. No menciones ninguna otra sentencia, ni en la jurisprudencia ni en la valoración.
+- Añade una sentencia solo si respalda de verdad la valoración de esa cláusula; lo normal es \
+que muchas cláusulas no tengan ninguna.
+- En "cita" copia literalmente uno de los pasajes que se dan para esa sentencia, o deja la \
+cadena vacía si no tiene pasajes o ninguno encaja.
+
 Reglas generales:
 - Describe lo que dice el contrato; no inventes contenido que no esté en el texto.
 - Si el documento no es un contrato de alquiler, marca es_contrato_de_alquiler como false \
 y deja la lista de cláusulas vacía.
 """
+
+
+def _texto_jurisprudencia() -> str:
+    bloques = ["BASE DE JURISPRUDENCIA VERIFICADA"]
+    for s in SENTENCIAS:
+        pasajes = "\n".join(f'  - "{p}"' for p in s["pasajes"]) or "  (sin pasajes: cítala solo por su identificador)"
+        bloques.append(
+            f"[{s['id']}] {s['tribunal']}, {s['fecha']} ({s['ecli']})\n"
+            f"Temas: {', '.join(s['temas'])}\nResumen: {s['resumen']}\nPasajes literales:\n{pasajes}"
+        )
+    return "\n\n".join(bloques)
+
+
+TEXTO_JURISPRUDENCIA = _texto_jurisprudencia()
 
 
 class ErrorAnalisis(Exception):
@@ -133,6 +182,7 @@ def analizar_contrato(pdf: bytes) -> AnalisisContrato:
             fallbacks="default",
             system=[
                 {"type": "text", "text": INSTRUCCIONES},
+                {"type": "text", "text": TEXTO_JURISPRUDENCIA},
                 # La LAU es igual en todas las peticiones: se guarda en caché y las
                 # siguientes la leen a una fracción del precio.
                 {"type": "text", "text": TEXTO_LAU, "cache_control": {"type": "ephemeral"}},
@@ -176,14 +226,61 @@ def _normalizar(texto: str) -> str:
 
 
 _LAU_NORMALIZADA = _normalizar(TEXTO_LAU)
+_SENTENCIAS_NORMALIZADAS = {
+    s["boe_id"]: _normalizar((CARPETA_JURISPRUDENCIA / "textos" / f"{s['boe_id']}.txt").read_text(encoding="utf-8"))
+    for s in SENTENCIAS if s["boe_id"]
+}
+
+
+def _clave_norma(norma: str) -> str | None:
+    """'LAU', 'CONSTITUCIÓN'... si la norma es una de NORMAS_BOE; None si no."""
+    norma = norma.upper()
+    if norma.strip() in ("LAU", "LEY DE ARRENDAMIENTOS URBANOS") or "ARRENDAMIENTOS URBANOS" in norma:
+        return "LAU"
+    return next((clave for clave in NORMAS_BOE if clave in norma), None)
+
+
+def es_lau(fundamento: Fundamento) -> bool:
+    return _clave_norma(fundamento.norma) == "LAU"
+
+
+def nombre_norma(fundamento: Fundamento) -> str:
+    clave = _clave_norma(fundamento.norma)
+    return NORMAS_BOE[clave][0] if clave else fundamento.norma
+
+
+def url_fundamento(fundamento: Fundamento) -> str | None:
+    """Enlace al artículo en el texto consolidado del BOE, si la norma es conocida."""
+    clave = _clave_norma(fundamento.norma)
+    if not clave:
+        return None
+    url = NORMAS_BOE[clave][1]
+    numero = re.match(r"\s*(\d+(?:\s*bis)?)", fundamento.articulo)
+    if not numero:
+        return url
+    numero = " ".join(numero.group(1).split())
+    ancla = ANCLAS_LAU.get(numero) if clave == "LAU" else f"a{numero.replace(' ', '')}"
+    return f"{url}#{ancla}" if ancla else url
 
 
 def cita_verificada(fundamento: Fundamento) -> bool | None:
     """True si la cita aparece literalmente en la LAU, False si no, None si es de otra norma."""
-    if fundamento.norma.strip().upper() not in ("LAU", "LEY DE ARRENDAMIENTOS URBANOS"):
+    if not es_lau(fundamento):
         return None
     cita = _normalizar(fundamento.cita).strip(' ."')
     return bool(cita) and cita in _LAU_NORMALIZADA
+
+
+def jurisprudencia_verificada(referencia: ReferenciaJurisprudencia) -> bool:
+    """True si la sentencia está en la base y, si hay cita, aparece literalmente en su texto oficial."""
+    sentencia = SENTENCIAS_POR_ID.get(referencia.id)
+    if sentencia is None:
+        return False
+    cita = _normalizar(referencia.cita).strip(' ."«»')
+    if not cita:
+        return True
+    texto = _SENTENCIAS_NORMALIZADAS.get(sentencia["boe_id"])
+    return texto is not None and cita in texto
 
 
 def cargar_ejemplo() -> AnalisisContrato:

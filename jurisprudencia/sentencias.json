@@ -1,0 +1,45 @@
+{
+  "_nota": "Base de jurisprudencia verificada a mano. Cada sentencia se ha comprobado en su fuente oficial. Los resúmenes están redactados con palabras propias. Solo se guardan pasajes literales de sentencias publicadas en el BOE, cuya reutilización está permitida; las del CENDOJ solo se referencian, porque su aviso legal exige autorización del CGPJ para reutilizarlas en bases de datos.",
+  "sentencias": [
+    {
+      "id": "STC 22/1984",
+      "tribunal": "Tribunal Constitucional, Sala Segunda",
+      "fecha": "17/02/1984",
+      "ecli": "ECLI:ES:TC:1984:22",
+      "boe_id": "BOE-T-1984-6110",
+      "url": "https://www.boe.es/buscar/doc.php?id=BOE-T-1984-6110",
+      "temas": ["inviolabilidad del domicilio", "acceso del propietario a la vivienda alquilada"],
+      "resumen": "El domicilio protege la vida privada de quien vive en él, no solo el espacio físico. Para entrar hace falta el consentimiento de quien lo habita o una resolución judicial.",
+      "pasajes": [
+        "la protección constitucional del domicilio es una protección de carácter instrumental, que defiende los ámbitos en que se desarrolla la vida privada de la persona",
+        "no sólo es objeto de protección el espacio físico en sí mismo considerado, sino lo que en él hay de emanación de la persona y de esfera privada de ella",
+        "La regla segunda establece un doble condicionamiento a la entrada y al registro, que consiste en el consentimiento del titular o en la resolución judicial"
+      ]
+    },
+    {
+      "id": "STC 89/1994",
+      "tribunal": "Tribunal Constitucional, Pleno",
+      "fecha": "17/03/1994",
+      "ecli": "ECLI:ES:TC:1994:89",
+      "boe_id": "BOE-T-1994-8338",
+      "url": "https://www.boe.es/buscar/doc.php?id=BOE-T-1994-8338",
+      "temas": ["prórroga obligatoria del alquiler", "duración del contrato", "función social de la propiedad"],
+      "resumen": "La prórroga forzosa de los alquileres es constitucional: limita el derecho de propiedad del arrendador, pero no lo anula, y se justifica por la función social de la propiedad (art. 33 de la Constitución). Los Reales Decretos-ley 27/2026 y 28/2026 se apoyan en esta sentencia.",
+      "pasajes": [
+        "no significa que la prórroga forzosa convierta en inexistente o puramente nominal, el derecho de propiedad del arrendador",
+        "Supone, ciertamente, una restricción o limitación de este derecho"
+      ]
+    },
+    {
+      "id": "STS 1387/2025",
+      "tribunal": "Tribunal Supremo, Sala de lo Civil",
+      "fecha": "07/10/2025",
+      "ecli": "ECLI:ES:TS:2025:4240",
+      "boe_id": null,
+      "url": "https://www.poderjudicial.es/search/AN/openDocument/025eff59fddeb1a4a0a8778d75e36f0d/20251017",
+      "temas": ["prórroga pactada", "duración del contrato", "cláusulas que mejoran la posición del inquilino"],
+      "resumen": "En un contrato de vivienda posterior a la LAU de 1994, el Supremo admitió una cláusula que prorrogaba el alquiler año a año de forma obligatoria para el arrendador y voluntaria para el inquilino.",
+      "pasajes": []
+    }
+  ]
+}

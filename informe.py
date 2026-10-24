@@ -5,7 +5,17 @@ from pathlib import Path
 
 from fpdf import FPDF
 
-from analizador import VERSION_LAU, AnalisisContrato, Clausula, cita_verificada
+from analizador import (
+    SENTENCIAS,
+    SENTENCIAS_POR_ID,
+    VERSION_LAU,
+    AnalisisContrato,
+    Clausula,
+    cita_verificada,
+    jurisprudencia_verificada,
+    nombre_norma,
+    url_fundamento,
+)
 
 CARPETA_FUENTES = Path(__file__).parent / "fuentes"
 
@@ -64,6 +74,12 @@ class _Informe(FPDF):
         self.set_text_color(*TEXTO)
         self.multi_cell(0, 6, f"{clausula.numero}. {clausula.titulo}", new_x="LMARGIN", new_y="NEXT")
 
+    def enlace(self, url: str, *, sangria=3.0):
+        self.set_font("DejaVu", size=7)
+        self.set_text_color(41, 98, 160)
+        self.set_x(self.l_margin + sangria)
+        self.cell(self.epw - sangria, 4, f"Fuente: {url}", link=url, new_x="LMARGIN", new_y="NEXT")
+
 
 def generar_informe(analisis: AnalisisContrato, nombre_archivo: str, es_ejemplo: bool = False) -> bytes:
     pdf = _Informe(format="A4")
@@ -119,7 +135,8 @@ def generar_informe(analisis: AnalisisContrato, nombre_archivo: str, es_ejemplo:
         pdf.cell(ancho, 11, f"{total}  {TITULO_RECUENTO[color]}", fill=True, align="C")
         pdf.set_x(pdf.get_x() + 4)
     pdf.ln(13)
-    pdf.parrafo(f"Comparado con la Ley de Arrendamientos Urbanos. {VERSION_LAU}.", size=8, color=GRIS)
+    pdf.parrafo(f"Comparado con la Ley de Arrendamientos Urbanos y con {len(SENTENCIAS)} sentencias verificadas "
+                f"del Tribunal Constitucional y del Tribunal Supremo. {VERSION_LAU}.", size=8, color=GRIS)
 
     a_revisar = [c for c in analisis.clausulas if c.semaforo != "verde"]
     if a_revisar:
@@ -151,11 +168,28 @@ def generar_informe(analisis: AnalisisContrato, nombre_archivo: str, es_ejemplo:
         pdf.parrafo(clausula.valoracion, size=9)
         for fundamento in clausula.fundamentos:
             verificada = cita_verificada(fundamento)
-            norma = "LAU" if verificada is not None else fundamento.norma
             pdf.ln(1)
-            pdf.parrafo(f"Art. {fundamento.articulo} {norma} · {ESTADO_CITA[verificada]}", size=8, bold=True,
-                        color=GRIS, sangria=3)
+            pdf.parrafo(f"Art. {fundamento.articulo} · {nombre_norma(fundamento)} · {ESTADO_CITA[verificada]}",
+                        size=8, bold=True, color=GRIS, sangria=3)
             pdf.parrafo(f"«{fundamento.cita}»", size=8, color=GRIS, sangria=3, alto=4)
+            if url := url_fundamento(fundamento):
+                pdf.enlace(url)
+        if clausula.jurisprudencia:
+            pdf.ln(1)
+            pdf.parrafo("Jurisprudencia:", size=9, bold=True)
+            for referencia in clausula.jurisprudencia:
+                sentencia = SENTENCIAS_POR_ID.get(referencia.id)
+                pdf.ln(1)
+                if sentencia is None or not jurisprudencia_verificada(referencia):
+                    pdf.parrafo(f"✗ {referencia.id}: su cita no coincide con el texto oficial. No te fíes de ella.",
+                                size=8, bold=True, color=GRIS, sangria=3)
+                    continue
+                pdf.parrafo(f"{sentencia['id']} · {sentencia['tribunal']}, {sentencia['fecha']} · ✓ sentencia verificada",
+                            size=8, bold=True, color=GRIS, sangria=3)
+                pdf.parrafo(referencia.relevancia, size=9, sangria=3)
+                if referencia.cita:
+                    pdf.parrafo(f"«{referencia.cita}»", size=8, color=GRIS, sangria=3, alto=4)
+                pdf.enlace(sentencia["url"])
         pdf.ln(3)
         pdf.set_draw_color(220, 220, 220)
         pdf.line(pdf.l_margin, pdf.get_y(), pdf.l_margin + pdf.epw, pdf.get_y())

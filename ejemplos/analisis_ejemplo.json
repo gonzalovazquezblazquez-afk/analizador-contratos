@@ -27,7 +27,8 @@
           "articulo": "2.1",
           "cita": "Se considera arrendamiento de vivienda habitual aquel arrendamiento que recae sobre una edificación habitable cuyo destino primordial sea satisfacer la necesidad de vivienda del arrendatario"
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Segunda",
@@ -49,6 +50,18 @@
           "norma": "LAU",
           "articulo": "6",
           "cita": "Son nulas, y se tendrán por no puestas, las estipulaciones que modifiquen en perjuicio del arrendatario o subarrendatario las normas del presente Título"
+        }
+      ],
+      "jurisprudencia": [
+        {
+          "id": "STC 89/1994",
+          "relevancia": "El Tribunal Constitucional avaló que la ley obligue al propietario a prorrogar el alquiler: limita su derecho de propiedad, pero se justifica por su función social. La prórroga obligatoria de la LAU actual responde a esa misma lógica.",
+          "cita": "no significa que la prórroga forzosa convierta en inexistente o puramente nominal, el derecho de propiedad del arrendador"
+        },
+        {
+          "id": "STS 1387/2025",
+          "relevancia": "El Tribunal Supremo admite pactos de duración que mejoran la posición del inquilino. Esta cláusula hace justo lo contrario: le quita la prórroga que le da la ley.",
+          "cita": ""
         }
       ]
     },
@@ -73,7 +86,8 @@
           "articulo": "17.3",
           "cita": "El pago se efectuará a través de medios electrónicos."
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Cuarta",
@@ -91,7 +105,8 @@
           "articulo": "18.1",
           "cita": "En todo caso, el incremento producido como consecuencia de la actualización anual de la renta no podrá exceder del resultado de aplicar la variación porcentual experimentada por el Índice de Referencia para la Actualización Anual de los Contratos de Arrendamiento de Vivienda (IRAV)"
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Quinta",
@@ -114,7 +129,8 @@
           "articulo": "36.5",
           "cita": "En el caso del arrendamiento de vivienda, en contratos de hasta cinco años de duración, o de hasta siete años si el arrendador fuese persona jurídica, el valor de esta garantía adicional no podrá exceder de dos mensualidades de renta."
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Sexta",
@@ -132,7 +148,8 @@
           "articulo": "20.2",
           "cita": "Los gastos de gestión inmobiliaria y de formalización del contrato no podrán ser repercutidos al arrendatario, ni directa ni indirectamente, bajo ningún concepto o denominación."
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Séptima",
@@ -150,7 +167,8 @@
           "articulo": "20.4",
           "cita": "Los gastos por servicios con que cuente la finca arrendada que se individualicen mediante aparatos contadores serán en todo caso de cuenta del arrendatario."
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Octava",
@@ -178,7 +196,8 @@
           "articulo": "6",
           "cita": "Son nulas, y se tendrán por no puestas, las estipulaciones que modifiquen en perjuicio del arrendatario o subarrendatario las normas del presente Título"
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Novena",
@@ -196,7 +215,8 @@
           "articulo": "23.1",
           "cita": "El arrendatario no podrá realizar sin el consentimiento del arrendador, expresado por escrito, obras que modifiquen la configuración de la vivienda"
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Décima",
@@ -224,7 +244,8 @@
           "articulo": "6",
           "cita": "Son nulas, y se tendrán por no puestas, las estipulaciones que modifiquen en perjuicio del arrendatario o subarrendatario las normas del presente Título"
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Undécima",
@@ -246,6 +267,13 @@
           "articulo": "21.3",
           "cita": "a cuyos solos efectos deberá facilitar al arrendador la verificación directa, por sí mismo o por los técnicos que designe, del estado de la vivienda"
         }
+      ],
+      "jurisprudencia": [
+        {
+          "id": "STC 22/1984",
+          "relevancia": "Para entrar en un domicilio hace falta el consentimiento de quien vive en él o una orden judicial. Un contrato no puede darle al propietario permiso para entrar cuando quiera.",
+          "cita": "La regla segunda establece un doble condicionamiento a la entrada y al registro, que consiste en el consentimiento del titular o en la resolución judicial"
+        }
       ]
     },
     {
@@ -263,7 +291,8 @@
           "articulo": "4.2",
           "cita": "los arrendamientos de vivienda previstos en el artículo 2 se regirán por los pactos, cláusulas y condiciones determinadas por la voluntad de las partes, en el marco de lo establecido en el título II de la presente ley"
         }
-      ]
+      ],
+      "jurisprudencia": []
     },
     {
       "numero": "Decimotercera",
@@ -280,7 +309,8 @@
           "articulo": "52.1.7.º",
           "cita": "En los juicios sobre arrendamientos de inmuebles y en los de desahucio, será competente el tribunal del lugar en que esté sita la finca."
         }
-      ]
+      ],
+      "jurisprudencia": []
     }
   ]
 }

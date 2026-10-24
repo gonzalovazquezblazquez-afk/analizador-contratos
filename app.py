@@ -9,6 +9,8 @@ import streamlit as st
 
 from analizador import (
     PDF_EJEMPLO,
+    SENTENCIAS,
+    SENTENCIAS_POR_ID,
     VERSION_LAU,
     AnalisisContrato,
     Clausula,
@@ -16,6 +18,9 @@ from analizador import (
     analizar_contrato,
     cargar_ejemplo,
     cita_verificada,
+    jurisprudencia_verificada,
+    nombre_norma,
+    url_fundamento,
 )
 from informe import generar_informe
 
@@ -75,15 +80,34 @@ col_descargar.download_button(
 def mostrar_fundamentos(clausula: Clausula) -> None:
     for fundamento in clausula.fundamentos:
         verificada = cita_verificada(fundamento)
-        norma = "LAU" if verificada is not None else fundamento.norma
         if verificada:
             estado = "✅ cita comprobada en el texto del BOE"
         elif verificada is None:
             estado = "⚪ cita no comprobada: esta norma no está incluida en la herramienta"
         else:
             estado = "❌ esta cita no aparece en la LAU: no te fíes de ella"
-        st.markdown(f"**Art. {fundamento.articulo} {norma}** · {estado}")
+        enlace = url_fundamento(fundamento)
+        fuente = f" · [Ver en el BOE]({enlace})" if enlace else ""
+        st.markdown(f"**Art. {fundamento.articulo} · {nombre_norma(fundamento)}**{fuente}  \n{estado}")
         st.markdown(f"> {fundamento.cita}")
+
+
+def mostrar_jurisprudencia(clausula: Clausula) -> None:
+    if not clausula.jurisprudencia:
+        return
+    st.markdown("**Jurisprudencia:**")
+    for referencia in clausula.jurisprudencia:
+        sentencia = SENTENCIAS_POR_ID.get(referencia.id)
+        if sentencia is None or not jurisprudencia_verificada(referencia):
+            st.markdown(f"❌ **{referencia.id}**: su cita no coincide con el texto oficial. No te fíes de ella.")
+            continue
+        st.markdown(
+            f"⚖️ **{sentencia['id']}** · {sentencia['tribunal']}, {sentencia['fecha']} · "
+            f"[Ver sentencia]({sentencia['url']})  \n{referencia.relevancia}"
+        )
+        if referencia.cita:
+            st.markdown(f"> {referencia.cita}")
+            st.caption("✅ Pasaje comprobado en el texto oficial publicado en el BOE")
 
 
 @st.cache_data(ttl=3600)
@@ -134,7 +158,10 @@ col_rojo, col_amarillo, col_verde = st.columns(3)
 col_rojo.metric("🔴 Contrarias a la ley", recuento["rojo"])
 col_amarillo.metric("🟡 A revisar", recuento["amarillo"])
 col_verde.metric("🟢 Correctas", recuento["verde"])
-st.caption(f"Comparado con la Ley de Arrendamientos Urbanos. {VERSION_LAU}.")
+st.caption(
+    f"Comparado con la Ley de Arrendamientos Urbanos y con {len(SENTENCIAS)} sentencias verificadas "
+    f"del Tribunal Constitucional y del Tribunal Supremo. {VERSION_LAU}."
+)
 
 solo_revisar = st.toggle("Mostrar solo las cláusulas rojas y amarillas")
 clausulas = [c for c in analisis.clausulas if not solo_revisar or c.semaforo != "verde"]
@@ -149,3 +176,4 @@ for clausula in clausulas:
                 st.markdown(f"- {punto}")
         CAJA_VALORACION[clausula.semaforo](f"**Valoración legal:** {clausula.valoracion}")
         mostrar_fundamentos(clausula)
+        mostrar_jurisprudencia(clausula)
