@@ -1,4 +1,4 @@
-"""Lógica del analizador: envía el contrato a Claude y devuelve un análisis estructurado.
+"""Lógica del analizador: envía el contrato y la LAU a Claude y devuelve un análisis estructurado.
 
 Se puede usar desde la web (app.py) o desde la terminal:
     .venv/bin/python analizador.py ejemplos/contrato_alquiler_ejemplo.pdf
@@ -7,6 +7,7 @@ Se puede usar desde la web (app.py) o desde la terminal:
 import base64
 import sys
 from pathlib import Path
+from typing import Literal
 
 import anthropic
 from dotenv import load_dotenv
@@ -24,6 +25,10 @@ CARPETA_EJEMPLOS = Path(__file__).parent / "ejemplos"
 PDF_EJEMPLO = CARPETA_EJEMPLOS / "contrato_alquiler_ejemplo.pdf"
 ANALISIS_EJEMPLO = CARPETA_EJEMPLOS / "analisis_ejemplo.json"
 
+# Texto vigente de la LAU, generado con legislacion/descargar_lau.py
+TEXTO_LAU = (Path(__file__).parent / "legislacion" / "lau.txt").read_text(encoding="utf-8")
+VERSION_LAU = TEXTO_LAU.splitlines()[1]  # "Texto consolidado del BOE (...), última modificación..."
+
 
 # --- Estructura de la respuesta -------------------------------------------
 # Claude está obligado a responder exactamente con esta forma (structured outputs),
@@ -39,6 +44,16 @@ class DatosContrato(BaseModel):
     fianza: str
 
 
+class Fundamento(BaseModel):
+    norma: str = Field(
+        description="'LAU' si es la Ley de Arrendamientos Urbanos; si no, el nombre de la norma"
+    )
+    articulo: str = Field(description="Artículo y apartado, p. ej. '36.1'")
+    cita: str = Field(
+        description="Fragmento literal y continuo del artículo, copiado palabra por palabra, sin puntos suspensivos"
+    )
+
+
 class Clausula(BaseModel):
     numero: str = Field(description="Numeración tal como aparece: 'Primera', '3', 'Anexo I'...")
     titulo: str = Field(description="Título breve; si la cláusula no tiene, inventa uno descriptivo")
@@ -46,6 +61,9 @@ class Clausula(BaseModel):
     a_tener_en_cuenta: list[str] = Field(
         description="Consecuencias prácticas para el inquilino: obligaciones, costes, plazos"
     )
+    semaforo: Literal["verde", "amarillo", "rojo"]
+    valoracion: str = Field(description="Por qué tiene ese color, en lenguaje sencillo, 1-3 frases")
+    fundamentos: list[Fundamento] = Field(description="Artículos que justifican la valoración")
 
 
 class AnalisisContrato(BaseModel):
@@ -59,7 +77,7 @@ class AnalisisContrato(BaseModel):
 
 INSTRUCCIONES = """\
 Eres un asistente que ayuda a personas sin formación jurídica a entender contratos \
-de alquiler de vivienda en España.
+de alquiler de vivienda en España y a detectar cláusulas que la ley no permite.
 
 Tu tarea:
 1. Identifica TODAS las cláusulas del contrato, en el orden en que aparecen, incluidas \
@@ -67,11 +85,30 @@ las estipulaciones de los anexos. No te saltes ninguna ni fusiones varias en una
 2. Explica cada cláusula en español claro y cercano, como se lo explicarías a un amigo: \
 sin latinismos ni jerga. Si usas un término jurídico, explícalo.
 3. En "a_tener_en_cuenta" indica qué implica en la práctica para el inquilino.
-4. Extrae los datos principales. Si un dato no aparece en el contrato, escribe "No consta".
+4. Compara cada cláusula con la Ley de Arrendamientos Urbanos (LAU), cuyo texto vigente \
+tienes más abajo, y asígnale un color:
+   - "verde": conforme con la ley o dentro de lo que las partes pueden pactar libremente.
+   - "amarillo": hay que revisarla. Es válida solo con límites o matices importantes, o \
+depende de datos que el contrato no aclara y que cambiarían la conclusión. Si un dato \
+desconocido solo añade un límite general (por ejemplo, las zonas de mercado residencial \
+tensionado), menciónalo en la valoración sin cambiar el color por ello.
+   - "rojo": contradice una norma imperativa. Recuerda que según el artículo 6 LAU son nulas \
+las estipulaciones que modifiquen en perjuicio del arrendatario las normas del Título II.
+   En "valoracion" explica el porqué y, si es roja, qué ocurre en la práctica (por ejemplo, \
+que la cláusula se tiene por no puesta y se aplica la ley).
+5. Extrae los datos principales. Si un dato no aparece en el contrato, escribe "No consta".
 
-Reglas:
+Reglas para los fundamentos:
+- Para la LAU, "cita" debe ser un fragmento copiado LITERALMENTE del texto de abajo: un \
+programa comprobará que existe palabra por palabra. No parafrasees ni uses puntos suspensivos.
+- Puedes fundamentar en otras normas (Constitución, Código Civil, Ley de Enjuiciamiento \
+Civil...) solo si conoces su texto con seguridad; se mostrará como cita no verificada.
+- Una cláusula verde puede no tener fundamentos si basta con la libertad de pacto.
+- Las notas "Téngase en cuenta que, con efectos de..." anuncian redacciones futuras. Aplica \
+la vigente y, si un cambio futuro afecta a la cláusula, menciónalo en la valoración.
+
+Reglas generales:
 - Describe lo que dice el contrato; no inventes contenido que no esté en el texto.
-- En esta fase NO valores si las cláusulas son legales o abusivas: solo explícalas.
 - Si el documento no es un contrato de alquiler, marca es_contrato_de_alquiler como false \
 y deja la lista de cláusulas vacía.
 """
@@ -94,7 +131,12 @@ def analizar_contrato(pdf: bytes) -> AnalisisContrato:
             # Si el modelo rechazara la petición, la API la reintenta con otro modelo.
             betas=["server-side-fallback-2026-07-01"],
             fallbacks="default",
-            system=INSTRUCCIONES,
+            system=[
+                {"type": "text", "text": INSTRUCCIONES},
+                # La LAU es igual en todas las peticiones: se guarda en caché y las
+                # siguientes la leen a una fracción del precio.
+                {"type": "text", "text": TEXTO_LAU, "cache_control": {"type": "ephemeral"}},
+            ],
             messages=[{
                 "role": "user",
                 "content": [
@@ -125,6 +167,23 @@ def analizar_contrato(pdf: bytes) -> AnalisisContrato:
     if respuesta.parsed_output is None:
         raise ErrorAnalisis("La respuesta no tenía el formato esperado. Vuelve a intentarlo.")
     return respuesta.parsed_output
+
+
+def _normalizar(texto: str) -> str:
+    # Ignora diferencias de espacios, saltos de línea y tipo de comillas
+    texto = texto.replace("«", '"').replace("»", '"').replace("“", '"').replace("”", '"')
+    return " ".join(texto.split()).casefold()
+
+
+_LAU_NORMALIZADA = _normalizar(TEXTO_LAU)
+
+
+def cita_verificada(fundamento: Fundamento) -> bool | None:
+    """True si la cita aparece literalmente en la LAU, False si no, None si es de otra norma."""
+    if fundamento.norma.strip().upper() not in ("LAU", "LEY DE ARRENDAMIENTOS URBANOS"):
+        return None
+    cita = _normalizar(fundamento.cita).strip(' ."')
+    return bool(cita) and cita in _LAU_NORMALIZADA
 
 
 def cargar_ejemplo() -> AnalisisContrato:

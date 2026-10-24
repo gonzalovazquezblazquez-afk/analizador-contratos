@@ -6,14 +6,26 @@ import os
 
 import streamlit as st
 
-from analizador import PDF_EJEMPLO, AnalisisContrato, ErrorAnalisis, analizar_contrato, cargar_ejemplo
+from analizador import (
+    PDF_EJEMPLO,
+    VERSION_LAU,
+    AnalisisContrato,
+    Clausula,
+    ErrorAnalisis,
+    analizar_contrato,
+    cargar_ejemplo,
+    cita_verificada,
+)
+
+EMOJI = {"rojo": "🔴", "amarillo": "🟡", "verde": "🟢"}
+CAJA_VALORACION = {"rojo": st.error, "amarillo": st.warning, "verde": st.success}
 
 st.set_page_config(page_title="Analizador de contratos de alquiler", page_icon="📄")
 
 st.title("📄 Analizador de contratos de alquiler")
 st.write(
-    "Sube tu contrato de alquiler de vivienda en PDF y te explicamos cada cláusula "
-    "en lenguaje sencillo."
+    "Sube tu contrato de alquiler de vivienda en PDF: te explicamos cada cláusula en lenguaje "
+    "sencillo y la comparamos con la Ley de Arrendamientos Urbanos."
 )
 st.warning(
     "**Herramienta informativa.** Este análisis lo genera una inteligencia artificial y puede "
@@ -53,6 +65,21 @@ col_descargar.download_button(
     use_container_width=True,
 )
 
+
+def mostrar_fundamentos(clausula: Clausula) -> None:
+    for fundamento in clausula.fundamentos:
+        verificada = cita_verificada(fundamento)
+        norma = "LAU" if verificada is not None else fundamento.norma
+        if verificada:
+            estado = "✅ cita comprobada en el texto del BOE"
+        elif verificada is None:
+            estado = "⚪ cita no comprobada: esta norma no está incluida en la herramienta"
+        else:
+            estado = "❌ esta cita no aparece en la LAU: no te fíes de ella"
+        st.markdown(f"**Art. {fundamento.articulo} {norma}** · {estado}")
+        st.markdown(f"> {fundamento.cita}")
+
+
 analisis: AnalisisContrato | None = st.session_state.get("analisis")
 if analisis is None:
     st.stop()
@@ -79,11 +106,24 @@ col2.markdown(f"**Renta:** {datos.renta}")
 col2.markdown(f"**Duración:** {datos.duracion}")
 col2.markdown(f"**Fianza:** {datos.fianza}")
 
-st.markdown(f"#### Cláusulas ({len(analisis.clausulas)})")
-for clausula in analisis.clausulas:
-    with st.expander(f"**{clausula.numero}.** {clausula.titulo}"):
+st.markdown("#### Semáforo legal")
+recuento = {color: sum(c.semaforo == color for c in analisis.clausulas) for color in EMOJI}
+col_rojo, col_amarillo, col_verde = st.columns(3)
+col_rojo.metric("🔴 Contrarias a la ley", recuento["rojo"])
+col_amarillo.metric("🟡 A revisar", recuento["amarillo"])
+col_verde.metric("🟢 Correctas", recuento["verde"])
+st.caption(f"Comparado con la Ley de Arrendamientos Urbanos. {VERSION_LAU}.")
+
+solo_revisar = st.toggle("Mostrar solo las cláusulas rojas y amarillas")
+clausulas = [c for c in analisis.clausulas if not solo_revisar or c.semaforo != "verde"]
+
+st.markdown(f"#### Cláusulas ({len(clausulas)})")
+for clausula in clausulas:
+    with st.expander(f"{EMOJI[clausula.semaforo]} **{clausula.numero}.** {clausula.titulo}"):
         st.write(clausula.explicacion)
         if clausula.a_tener_en_cuenta:
             st.markdown("**A tener en cuenta:**")
             for punto in clausula.a_tener_en_cuenta:
                 st.markdown(f"- {punto}")
+        CAJA_VALORACION[clausula.semaforo](f"**Valoración legal:** {clausula.valoracion}")
+        mostrar_fundamentos(clausula)

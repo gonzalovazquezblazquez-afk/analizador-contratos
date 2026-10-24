@@ -77,20 +77,21 @@ CIERRE = (
 )
 
 # Lo que debería detectar el analizador en la Fase 2 (referencias a la LAU).
+# Color esperado del semáforo y motivo, según la LAU vigente a 08/10/2026.
 SOLUCION = {
-    "PRIMERA": "válida",
-    "SEGUNDA": "problemática: prórroga obligatoria hasta 5 años si el arrendador es persona física (art. 9)",
-    "TERCERA": "válida",
-    "CUARTA": "revisar: la actualización no puede superar el índice de referencia oficial (art. 18)",
-    "QUINTA": "problemática: la fianza legal en vivienda es de una mensualidad (art. 36)",
-    "SEXTA": "problemática: gestión inmobiliaria y formalización corren a cargo del arrendador (art. 20.1)",
-    "SÉPTIMA": "válida",
-    "OCTAVA": "problemática: las reparaciones de conservación corresponden al arrendador (art. 21)",
-    "NOVENA": "válida (art. 23)",
-    "DÉCIMA": "problemática: se puede desistir tras 6 meses con 30 días de preaviso (art. 11)",
-    "UNDÉCIMA": "problemática: vulnera la inviolabilidad del domicilio (art. 18.2 Constitución)",
-    "DUODÉCIMA": "válida",
-    "DECIMOTERCERA": "válida",
+    "PRIMERA": ("verde", "vivienda habitual (art. 2.1)"),
+    "SEGUNDA": ("rojo", "prórroga obligatoria hasta 5 años si el arrendador es persona física (arts. 9.1 y 6)"),
+    "TERCERA": ("verde", "renta libre y pago por medios electrónicos (arts. 17.1 y 17.3)"),
+    "CUARTA": ("amarillo", "la actualización no puede superar la variación del IRAV (art. 18.1)"),
+    "QUINTA": ("amarillo", "fianza de una mensualidad + garantía adicional de hasta dos (arts. 36.1 y 36.5)"),
+    "SEXTA": ("rojo", "gestión inmobiliaria y formalización no se pueden repercutir al inquilino (art. 20.2)"),
+    "SÉPTIMA": ("verde", "suministros con contador a cargo del inquilino (art. 20.4)"),
+    "OCTAVA": ("rojo", "las reparaciones de conservación corresponden al arrendador (arts. 21.1 y 21.4)"),
+    "NOVENA": ("verde", "obras con consentimiento escrito (art. 23.1)"),
+    "DÉCIMA": ("rojo", "desistimiento tras 6 meses con 30 días de preaviso, sin indemnización (art. 11)"),
+    "UNDÉCIMA": ("rojo", "inviolabilidad del domicilio (art. 18.2 Constitución)"),
+    "DUODÉCIMA": ("verde", "libertad de pacto (art. 4.2)"),
+    "DECIMOTERCERA": ("verde", "fuero del lugar de la finca (art. 52.1.7.º LEC)"),
 }
 
 

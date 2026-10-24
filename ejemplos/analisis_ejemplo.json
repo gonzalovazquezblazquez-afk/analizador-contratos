@@ -1,6 +1,6 @@
 {
   "es_contrato_de_alquiler": true,
-  "resumen": "Contrato por el que D. Antonio Ejemplo Ficticio alquila a Dña. Laura Prueba Inventada un piso en Madrid para que viva en él de forma habitual. Dura un año y la renta es de 950 € al mes, con una subida fija del 5 % cada año. La inquilina entrega 2.850 € de fianza y asume los suministros, los gastos de la agencia y todas las reparaciones. El contrato también regula las obras, qué pasa si la inquilina se va antes de tiempo, las visitas del propietario y prohíbe tener mascotas.",
+  "resumen": "Contrato por el que D. Antonio Ejemplo Ficticio alquila a Dña. Laura Prueba Inventada un piso en Madrid para que viva en él de forma habitual. Dura un año y la renta es de 950 € al mes, con una subida fija del 5 % cada año. La inquilina entrega 2.850 € de fianza y asume los suministros, los gastos de la agencia y todas las reparaciones. El contrato también regula las obras, qué pasa si la inquilina se va antes de tiempo, las visitas del propietario y prohíbe tener mascotas. Varias cláusulas chocan con la Ley de Arrendamientos Urbanos: la duración sin prórroga, los gastos de agencia, las reparaciones, la salida anticipada y el acceso del propietario a la vivienda.",
   "datos": {
     "tipo_contrato": "Arrendamiento de vivienda habitual",
     "arrendador": "D. Antonio Ejemplo Ficticio",
@@ -18,6 +18,15 @@
       "a_tener_en_cuenta": [
         "El piso es para vivir en él: darle otro uso (por ejemplo, alquilarlo a turistas) supondría incumplir el contrato.",
         "Que sea tu vivienda habitual determina qué normas se aplican al alquiler."
+      ],
+      "semaforo": "verde",
+      "valoracion": "Describe la vivienda y su uso como vivienda habitual, que es justo el tipo de alquiler que regula la LAU con más protección para el inquilino.",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "2.1",
+          "cita": "Se considera arrendamiento de vivienda habitual aquel arrendamiento que recae sobre una edificación habitable cuyo destino primordial sea satisfacer la necesidad de vivienda del arrendatario"
+        }
       ]
     },
     {
@@ -27,6 +36,20 @@
       "a_tener_en_cuenta": [
         "Fecha de fin: un año después de la firma, es decir, el 1 de septiembre de 2027.",
         "El contrato no prevé renovación: al vencer, tendrías que irte o negociar un contrato nuevo."
+      ],
+      "semaforo": "rojo",
+      "valoracion": "La ley no permite impedir la prórroga: como el arrendador es una persona física, el contrato se prorroga obligatoriamente cada año hasta llegar a cinco años, salvo que tú decidas irte avisando con 30 días. Esta parte de la cláusula se tiene por no puesta. Además, una reforma que entra en vigor el 15 de noviembre de 2026 (Real Decreto-ley 28/2026) cambia lo que ocurre después de esos cinco años (art. 10).",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "9.1",
+          "cita": "Si esta fuera inferior a cinco años, o inferior a siete años si el arrendador fuese persona jurídica, llegado el día del vencimiento del contrato, este se prorrogará obligatoriamente por plazos anuales hasta que el arrendamiento alcance una duración mínima de cinco años"
+        },
+        {
+          "norma": "LAU",
+          "articulo": "6",
+          "cita": "Son nulas, y se tendrán por no puestas, las estipulaciones que modifiquen en perjuicio del arrendatario o subarrendatario las normas del presente Título"
+        }
       ]
     },
     {
@@ -36,6 +59,20 @@
       "a_tener_en_cuenta": [
         "Plazo de pago: del día 1 al 5 de cada mes.",
         "Guarda los justificantes de las transferencias: son la prueba de que has pagado."
+      ],
+      "semaforo": "verde",
+      "valoracion": "La renta se fija libremente y el pago por transferencia es la forma que marca la ley. Si la vivienda estuviera en una zona declarada de mercado residencial tensionado, habría límites a la renta inicial (art. 17.6).",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "17.1",
+          "cita": "La renta será la que libremente estipulen las partes."
+        },
+        {
+          "norma": "LAU",
+          "articulo": "17.3",
+          "cita": "El pago se efectuará a través de medios electrónicos."
+        }
       ]
     },
     {
@@ -45,6 +82,15 @@
       "a_tener_en_cuenta": [
         "Ejemplo: el segundo año pagarías 997,50 € al mes.",
         "La subida no depende del IPC ni de ningún otro índice: es fija."
+      ],
+      "semaforo": "amarillo",
+      "valoracion": "Se puede pactar una subida anual, pero nunca por encima de la variación del índice oficial IRAV. Si ese índice sube menos de un 5 %, solo pueden aplicarte lo que marque el índice, aunque el contrato diga otra cosa. La subida además debe notificarse por escrito (art. 18.2).",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "18.1",
+          "cita": "En todo caso, el incremento producido como consecuencia de la actualización anual de la renta no podrá exceder del resultado de aplicar la variación porcentual experimentada por el Índice de Referencia para la Actualización Anual de los Contratos de Arrendamiento de Vivienda (IRAV)"
+        }
       ]
     },
     {
@@ -54,6 +100,20 @@
       "a_tener_en_cuenta": [
         "Al firmar necesitas tener disponibles 2.850 € de fianza, además del primer mes de alquiler.",
         "Pide un recibo firmado de la entrega de la fianza."
+      ],
+      "semaforo": "amarillo",
+      "valoracion": "La fianza legal de una vivienda es de una mensualidad (950 €). Los otros 1.900 € solo pueden pedirse como \"garantía adicional\", que en contratos de hasta cinco años no puede superar dos mensualidades. El total cabe dentro de la ley, pero el contrato debería distinguir la fianza de la garantía adicional en lugar de llamarlo todo \"fianza legal\".",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "36.1",
+          "cita": "fianza en metálico en cantidad equivalente a una mensualidad de renta en el arrendamiento de viviendas"
+        },
+        {
+          "norma": "LAU",
+          "articulo": "36.5",
+          "cita": "En el caso del arrendamiento de vivienda, en contratos de hasta cinco años de duración, o de hasta siete años si el arrendador fuese persona jurídica, el valor de esta garantía adicional no podrá exceder de dos mensualidades de renta."
+        }
       ]
     },
     {
@@ -63,6 +123,15 @@
       "a_tener_en_cuenta": [
         "Pregunta antes de firmar cuánto cobra la agencia: puede ser una cantidad importante.",
         "Este gasto se suma a la fianza y al primer mes de alquiler."
+      ],
+      "semaforo": "rojo",
+      "valoracion": "La ley prohíbe cobrar al inquilino los honorarios de la agencia y los gastos de formalizar el contrato, se llamen como se llamen. Si te los cobran, puedes reclamar su devolución.",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "20.2",
+          "cita": "Los gastos de gestión inmobiliaria y de formalización del contrato no podrán ser repercutidos al arrendatario, ni directa ni indirectamente, bajo ningún concepto o denominación."
+        }
       ]
     },
     {
@@ -72,6 +141,15 @@
       "a_tener_en_cuenta": [
         "Tendrás que cambiar la titularidad de los suministros o darlos de alta a tu nombre.",
         "Estos gastos van aparte de los 950 € de alquiler."
+      ],
+      "semaforo": "verde",
+      "valoracion": "Es normal y legal que el inquilino pague los suministros que se miden con contador según su consumo.",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "20.4",
+          "cita": "Los gastos por servicios con que cuente la finca arrendada que se individualicen mediante aparatos contadores serán en todo caso de cuenta del arrendatario."
+        }
       ]
     },
     {
@@ -81,6 +159,25 @@
       "a_tener_en_cuenta": [
         "Si se estropea algo importante, el contrato pone el coste a tu cargo.",
         "Haz fotos con fecha del estado del piso al entrar, para poder demostrar qué estaba ya estropeado."
+      ],
+      "semaforo": "rojo",
+      "valoracion": "Las reparaciones necesarias para que la vivienda siga siendo habitable las paga el propietario, salvo que el daño lo hayas causado tú. Al inquilino solo le corresponden las pequeñas reparaciones por el desgaste del uso diario. La cláusula se tiene por no puesta en lo que va más allá.",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "21.1",
+          "cita": "El arrendador está obligado a realizar, sin derecho a elevar por ello la renta, todas las reparaciones que sean necesarias para conservar la vivienda en las condiciones de habitabilidad para servir al uso convenido"
+        },
+        {
+          "norma": "LAU",
+          "articulo": "21.4",
+          "cita": "Las pequeñas reparaciones que exija el desgaste por el uso ordinario de la vivienda serán de cargo del arrendatario."
+        },
+        {
+          "norma": "LAU",
+          "articulo": "6",
+          "cita": "Son nulas, y se tendrán por no puestas, las estipulaciones que modifiquen en perjuicio del arrendatario o subarrendatario las normas del presente Título"
+        }
       ]
     },
     {
@@ -90,6 +187,15 @@
       "a_tener_en_cuenta": [
         "Pide siempre el permiso por escrito antes de cualquier obra; un correo electrónico sirve como prueba.",
         "Si haces obras sin permiso, estarías incumpliendo el contrato."
+      ],
+      "semaforo": "verde",
+      "valoracion": "Reproduce lo que dice la ley: las obras que cambian la configuración de la vivienda necesitan permiso del propietario por escrito.",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "23.1",
+          "cita": "El arrendatario no podrá realizar sin el consentimiento del arrendador, expresado por escrito, obras que modifiquen la configuración de la vivienda"
+        }
       ]
     },
     {
@@ -99,6 +205,25 @@
       "a_tener_en_cuenta": [
         "Ejemplo: si te vas a los 8 meses, según el contrato perderías los 2.850 € de fianza y deberías 4 mensualidades más (3.800 €).",
         "No se menciona ningún plazo de preaviso."
+      ],
+      "semaforo": "rojo",
+      "valoracion": "La ley te permite irte una vez pasados seis meses, avisando con al menos 30 días, y en ese caso el propietario no tiene derecho a ninguna indemnización. Perder la fianza y pagar los meses restantes va contra la ley y se tiene por no puesto.",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "11.1",
+          "cita": "El arrendatario podrá desistir del contrato de arrendamiento, una vez que hayan transcurrido al menos seis meses, siempre que se lo comunique al arrendador con una antelación mínima de treinta días."
+        },
+        {
+          "norma": "LAU",
+          "articulo": "11.3",
+          "cita": "el desistimiento del arrendatario así ejercido no generará derecho de indemnización en favor del arrendador."
+        },
+        {
+          "norma": "LAU",
+          "articulo": "6",
+          "cita": "Son nulas, y se tendrán por no puestas, las estipulaciones que modifiquen en perjuicio del arrendatario o subarrendatario las normas del presente Título"
+        }
       ]
     },
     {
@@ -107,6 +232,20 @@
       "explicacion": "El propietario puede entrar en el piso cuando quiera y sin avisarte, para comprobar que está en buen estado.",
       "a_tener_en_cuenta": [
         "Según el texto, no necesita avisar, pedir permiso ni respetar ningún horario."
+      ],
+      "semaforo": "rojo",
+      "valoracion": "La vivienda alquilada es tu domicilio y está protegido por la Constitución: el propietario no puede entrar sin tu consentimiento. La LAU solo le permite comprobar el estado de la vivienda cuando hay que hacer reparaciones, y con tu colaboración.",
+      "fundamentos": [
+        {
+          "norma": "Constitución Española",
+          "articulo": "18.2",
+          "cita": "El domicilio es inviolable. Ninguna entrada o registro podrá hacerse en él sin consentimiento del titular o resolución judicial, salvo en caso de flagrante delito."
+        },
+        {
+          "norma": "LAU",
+          "articulo": "21.3",
+          "cita": "a cuyos solos efectos deberá facilitar al arrendador la verificación directa, por sí mismo o por los técnicos que designe, del estado de la vivienda"
+        }
       ]
     },
     {
@@ -115,6 +254,15 @@
       "explicacion": "No puedes tener mascotas en el piso.",
       "a_tener_en_cuenta": [
         "Si tienes o piensas tener una mascota, tendrías que negociarlo antes de firmar."
+      ],
+      "semaforo": "verde",
+      "valoracion": "La LAU no regula las mascotas, así que el propietario puede prohibirlas en el contrato dentro de la libertad de pacto.",
+      "fundamentos": [
+        {
+          "norma": "LAU",
+          "articulo": "4.2",
+          "cita": "los arrendamientos de vivienda previstos en el artículo 2 se regirán por los pactos, cláusulas y condiciones determinadas por la voluntad de las partes, en el marco de lo establecido en el título II de la presente ley"
+        }
       ]
     },
     {
@@ -123,6 +271,15 @@
       "explicacion": "Si hay un conflicto que acabe en los tribunales, se resolverá en los juzgados de Madrid. \"Jurisdicción\" se refiere a qué tribunales son los competentes para decidir.",
       "a_tener_en_cuenta": [
         "Es la misma ciudad donde está el piso."
+      ],
+      "semaforo": "verde",
+      "valoracion": "En los pleitos sobre alquileres son competentes los tribunales del lugar donde está la vivienda, que aquí es Madrid, así que la cláusula coincide con la ley.",
+      "fundamentos": [
+        {
+          "norma": "Ley de Enjuiciamiento Civil",
+          "articulo": "52.1.7.º",
+          "cita": "En los juicios sobre arrendamientos de inmuebles y en los de desahucio, será competente el tribunal del lugar en que esté sita la finca."
+        }
       ]
     }
   ]
