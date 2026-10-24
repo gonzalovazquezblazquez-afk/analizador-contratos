@@ -19,6 +19,7 @@ from analizador import (
 )
 from informe import generar_informe
 
+REPOSITORIO = "https://github.com/gonzalovazquezblazquez-afk/analizador-contratos"
 EMOJI = {"rojo": "🔴", "amarillo": "🟡", "verde": "🟢"}
 CAJA_VALORACION = {"rojo": st.error, "amarillo": st.warning, "verde": st.success}
 
@@ -50,8 +51,9 @@ if os.getenv("ANTHROPIC_API_KEY"):
                 st.error(str(e))
 else:
     st.info(
-        "**Modo demo.** Sin clave de la API solo puedes ver el análisis de ejemplo. Para analizar "
-        "tus propios contratos, copia `.env.example` como `.env`, pega tu clave y reinicia la aplicación.",
+        "**Modo demo.** Esta versión muestra el análisis ya hecho de un contrato de ejemplo. Para "
+        f"analizar tus propios contratos, instala la aplicación con tu clave de la API siguiendo las "
+        f"instrucciones del [repositorio en GitHub]({REPOSITORIO}).",
         icon="🧪",
     )
 

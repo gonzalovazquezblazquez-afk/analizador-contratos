@@ -2,6 +2,8 @@
 
 Aplicación web que lee un contrato de alquiler de vivienda (España) en PDF, explica cada cláusula en lenguaje sencillo y la compara con la Ley de Arrendamientos Urbanos (LAU) vigente, usando la API de Claude.
 
+**🔗 Demo online: [contratos-alquiler-lau.streamlit.app](https://contratos-alquiler-lau.streamlit.app)** (modo demo con un contrato ficticio; pulsa "Ver análisis de ejemplo")
+
 > ⚖️ **Aviso:** herramienta informativa. El análisis lo genera una inteligencia artificial y puede contener errores. No sustituye el asesoramiento de un abogado.
 
 ## Qué hace
@@ -106,4 +108,4 @@ Los contratos se envían a la API de Anthropic para analizarlos y la aplicación
 - [x] **Fase 2:** comparación con la LAU (texto consolidado del BOE), semáforo por cláusula y verificación de citas
 - [x] **Fase 3:** informe descargable en PDF
 - [ ] **Fase 4:** evaluación con contratos de prueba y porcentaje de aciertos
-- [ ] **Fase 5:** demo publicada en Streamlit Community Cloud
+- [x] **Fase 5:** demo publicada en Streamlit Community Cloud
